@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -21,7 +21,6 @@ model video{
   duration  Int
   genre    String?
   tag     String[]
-  url       String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

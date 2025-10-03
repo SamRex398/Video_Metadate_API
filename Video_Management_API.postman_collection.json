@@ -1,0 +1,196 @@
+{
+  "info": {
+    "name": "Video Management API",
+    "description": "API for managing videos with JWT authentication. Includes endpoints for generating tokens and performing CRUD operations on videos with pagination and filters.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "user_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Get User Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/accesstoken",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "accesstoken"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set(\"user_token\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Admin Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/accesstoken?role=admin&token={{ADMIN_TOKEN}}",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "accesstoken"],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "admin"
+                },
+                {
+                  "key": "token",
+                  "value": "{{ADMIN_TOKEN}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set(\"admin_token\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Videos",
+      "item": [
+        {
+          "name": "Get Videos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/videos?page=1&limit=10&genre=Action&tag=popular",
+              "host": ["{{base_url}}"],
+              "path": ["videos"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of videos per page"
+                },
+                {
+                  "key": "genre",
+                  "value": "Action",
+                  "description": "Filter by genre"
+                },
+                {
+                  "key": "tag",
+                  "value": "popular",
+                  "description": "Filter by tag"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Video",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sample Video\",\n  \"description\": \"A sample video description\",\n  \"duration\": 120,\n  \"genre\": \"Action\",\n  \"tag\": [\"action\", \"thriller\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/videos/add",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "add"]
+            }
+          }
+        },
+        {
+          "name": "Update Video",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Video Title\",\n  \"description\": \"Updated description\",\n  \"duration\": 150,\n  \"genre\": \"Drama\",\n  \"tag\": [\"drama\", \"updated\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/videos/1",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Video",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/videos/1",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
