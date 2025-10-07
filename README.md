@@ -32,7 +32,7 @@ A RESTful API for managing videos, built with Node.js, Express, and Prisma. Supp
    DATABASE_URL="postgresql://username:password@localhost:5432/video_db"
    DIRECT_URL="postgresql://username:password@localhost:5432/video_db"
    JWT_SECRET_KEY="your_jwt_secret_key"
-   ADMIN_TOKEN="your_admin_token"
+   ADMIN_TOKEN=superAdminToken123
    ```
 
 4. Set up the database:
